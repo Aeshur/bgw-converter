@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+work/
+input_audio/
+input_wav/
+output_bgw/
+*.bgw
+*.wav
+*.tmp
+*.cache
+.DS_Store
