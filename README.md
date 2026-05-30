@@ -2,25 +2,28 @@
 
 FFXI BGW Converter converts audio files into Final Fantasy XI `.bgw` music files.
 
-It can:
+Current version: `1.0.0`
 
-- Convert common audio formats into FFXI `BGMStream` `.bgw` files.
-- Assign FFXI music IDs such as `music300.bgw`.
-- Preserve `LoopStart` tags when present.
-- Use a CSV file for exact IDs, output names, and loop points.
+## What It Does
+
+- Converts common audio formats into FFXI `BGMStream` `.bgw` files.
+- Assigns FFXI music IDs such as `music300.bgw`.
+- Preserves `LoopStart` tags when present.
+- Supports a CSV file for exact IDs, output names, and loop points.
 
 ## Requirements
 
 - Windows PowerShell 5 or newer
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [FFmpeg](https://ffmpeg.org/download.html), including `ffprobe`, on `PATH`
+
+If you use the source version, you also need the [.NET 8 SDK](https://dotnet.microsoft.com/download). Release zips include the BGW encoder executable.
 
 ## Quick Start
 
 Put audio files in a folder, then run:
 
 ```powershell
-.\Convert-AudioToBGW.ps1 `
+.\Convert-ToBGW.ps1 `
   -SourceDir '.\input_audio' `
   -OutputDir '.\output_bgw' `
   -StartMusicId 300 `
@@ -44,7 +47,7 @@ music_id,source_file,output_file,title,loop_enabled,loop_start_sample
 Then run:
 
 ```powershell
-.\Convert-AudioToBGW.ps1 `
+.\Convert-ToBGW.ps1 `
   -SourceDir '.\input_audio' `
   -MetadataCsv '.\examples\metadata.example.csv' `
   -OutputDir '.\output_bgw' `
@@ -67,6 +70,27 @@ The output folder receives:
 - `encoder-metadata.csv`
 
 Temporary WAV files are created in the system temp folder and deleted automatically. Use `-KeepWorkDir -WorkDir '.\work'` to keep them for inspection.
+
+## Known Limitations
+
+- The converter writes FFXI-style BGW music files, but you should test the result in your launcher, mod loader, or client setup.
+- Loop quality depends on the source `LoopStart` tag or the loop point you provide in CSV.
+- Audio is encoded as PlayStation ADPCM, so it is not lossless.
+- This does not install BGWs into the game or assign music to zones.
+
+## Release Builds
+
+Create a release zip:
+
+```powershell
+.\scripts\Build-Release.ps1
+```
+
+Run smoke tests:
+
+```powershell
+.\tests\Invoke-SmokeTests.ps1
+```
 
 ## Advanced
 

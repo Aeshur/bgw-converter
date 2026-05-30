@@ -4,6 +4,8 @@ work/
 input_audio/
 input_wav/
 output_bgw/
+dist/
+release/
 *.bgw
 *.wav
 *.tmp

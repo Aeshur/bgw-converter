@@ -4,3 +4,4 @@
 *.csproj text eol=crlf
 *.md text eol=crlf
 *.csv text eol=crlf
+*.txt text eol=crlf

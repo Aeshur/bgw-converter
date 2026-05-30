@@ -167,17 +167,23 @@ $OutputDir = [IO.Path]::GetFullPath($OutputDir)
 
 $autoWorkDir = -not $WorkDir
 if ($autoWorkDir) {
-    $WorkDir = Join-Path ([IO.Path]::GetTempPath()) ('ffxi-bgw-tools-' + [Guid]::NewGuid().ToString('N'))
+    $WorkDir = Join-Path ([IO.Path]::GetTempPath()) ('ffxi-bgw-converter-' + [Guid]::NewGuid().ToString('N'))
 }
 $WorkDir = [IO.Path]::GetFullPath($WorkDir)
 $inputWav = Join-Path $WorkDir 'input_wav'
 $encoderMetadata = Join-Path $WorkDir 'encoder-metadata.csv'
 $reportPath = Join-Path $OutputDir 'encode-report.csv'
+$packagedEncoderPath = Join-Path $PSScriptRoot 'bin\BgwBulkEncoder.exe'
 $projectPath = Join-Path $PSScriptRoot 'src\BgwBulkEncoder\BgwBulkEncoder.csproj'
 
 Test-Tool 'ffmpeg'
 Test-Tool 'ffprobe'
-Test-Tool 'dotnet'
+if (-not (Test-Path -LiteralPath $packagedEncoderPath)) {
+    Test-Tool 'dotnet'
+    if (-not (Test-Path -LiteralPath $projectPath)) {
+        throw "BgwBulkEncoder was not found. Expected packaged encoder at $packagedEncoderPath or source project at $projectPath."
+    }
+}
 
 try {
     New-Item -ItemType Directory -Force -Path $inputWav, $OutputDir | Out-Null
@@ -233,7 +239,13 @@ try {
     })
 
     $encoderRows | Export-Csv -LiteralPath $encoderMetadata -NoTypeInformation -Encoding UTF8
-    dotnet run --project $projectPath -c Release -- --input $inputWav --out $OutputDir --metadata $encoderMetadata --report $reportPath --clean $Clean.IsPresent.ToString().ToLowerInvariant()
+    if (Test-Path -LiteralPath $packagedEncoderPath) {
+        & $packagedEncoderPath --input $inputWav --out $OutputDir --metadata $encoderMetadata --report $reportPath --clean $Clean.IsPresent.ToString().ToLowerInvariant()
+    }
+    else {
+        dotnet run --project $projectPath -c Release -- --input $inputWav --out $OutputDir --metadata $encoderMetadata --report $reportPath --clean $Clean.IsPresent.ToString().ToLowerInvariant()
+    }
+
     if ($LASTEXITCODE -ne 0) {
         throw 'BgwBulkEncoder failed.'
     }
