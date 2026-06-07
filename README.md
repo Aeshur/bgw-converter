@@ -34,6 +34,19 @@ Files are sorted by filename. The first file becomes `music300.bgw`, the next be
 
 Supported input formats include `.ogg`, `.wav`, `.flac`, `.mp3`, `.m4a`, `.aac`, `.opus`, `.aif`, `.aiff`, and `.wma`.
 
+If you hear clipping or light static in-game, try adding a little headroom before encoding:
+
+```powershell
+.\Convert-ToBGW.ps1 `
+  -SourceDir '.\input_audio' `
+  -OutputDir '.\output_bgw_headroom' `
+  -StartMusicId 300 `
+  -GainDb -3 `
+  -Clean
+```
+
+`-GainDb` applies gain during the WAV preparation step. Negative values lower volume; `-3` is a good first test.
+
 ## Metadata CSV
 
 Use a CSV when you want exact IDs, names, or loop points:
@@ -51,6 +64,7 @@ Then run:
   -SourceDir '.\input_audio' `
   -MetadataCsv '.\examples\metadata.example.csv' `
   -OutputDir '.\output_bgw' `
+  -GainDb -3 `
   -Clean
 ```
 

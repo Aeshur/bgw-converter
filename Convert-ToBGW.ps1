@@ -7,6 +7,7 @@ param(
     [string]$MetadataCsv = '',
     [string]$OutputDir = '',
     [int]$StartMusicId = 300,
+    [double]$GainDb = 0,
     [string]$WorkDir = '',
     [switch]$Recurse,
     [switch]$Clean,
@@ -222,7 +223,24 @@ try {
 
         $wavName = 'music{0} - {1}.wav' -f $row.music_id, (ConvertTo-SafeFileName $row.title)
         $wavPath = Join-Path $inputWav $wavName
-        & ffmpeg -hide_banner -loglevel error -y -i $row.source_path -vn -ac 2 -ar $TargetSampleRate -c:a pcm_s16le $wavPath
+        $ffmpegArgs = @(
+            '-hide_banner',
+            '-loglevel', 'error',
+            '-y',
+            '-i', $row.source_path,
+            '-vn'
+        )
+        if ([math]::Abs($GainDb) -gt 0.000001) {
+            $gainValue = $GainDb.ToString('0.###', [Globalization.CultureInfo]::InvariantCulture)
+            $ffmpegArgs += @('-af', "volume=${gainValue}dB")
+        }
+        $ffmpegArgs += @(
+            '-ac', '2',
+            '-ar', $TargetSampleRate,
+            '-c:a', 'pcm_s16le',
+            $wavPath
+        )
+        & ffmpeg @ffmpegArgs
         if ($LASTEXITCODE -ne 0) {
             throw "ffmpeg failed for $($row.source_path)"
         }
