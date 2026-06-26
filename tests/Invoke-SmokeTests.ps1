@@ -37,7 +37,7 @@ $RepoRoot = [IO.Path]::GetFullPath($RepoRoot)
 Test-Tool 'ffmpeg'
 Test-Tool 'ffprobe'
 
-$testRoot = Join-Path ([IO.Path]::GetTempPath()) ('ffxi-bgw-converter-test-' + [Guid]::NewGuid().ToString('N'))
+$testRoot = Join-Path ([IO.Path]::GetTempPath()) ('bgw-converter-test-' + [Guid]::NewGuid().ToString('N'))
 $sourceDir = Join-Path $testRoot 'input_audio'
 $outputDir = Join-Path $testRoot 'output_bgw'
 $metadataOutputDir = Join-Path $testRoot 'metadata_output_bgw'

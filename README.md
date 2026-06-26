@@ -1,4 +1,4 @@
-# FFXI BGW Converter
+# BGW Converter
 
 ## What It Does
 
@@ -83,7 +83,7 @@ Temporary WAV files are created in the system temp folder and deleted automatica
 
 ## Known Limitations
 
-- The converter writes FFXI-style BGW music files, but you should test the result in pivot or client setup.
+- The converter writes FFXI style BGW music files, but you should test the result in pivot or client setup.
 - Loop quality depends on the source `LoopStart` tag or the loop point you provide in CSV.
 - Audio is encoded as PlayStation ADPCM, so it is not lossless.
 - This does not install BGWs into the game or assign music to zones.
@@ -127,4 +127,4 @@ music_id,output_file,input_wav,loop_enabled,loop_start_sample
 
 ## License
 
-FFXI BGW Converter is licensed under GPL-3.0. See [LICENSE](LICENSE).
+BGW Converter is licensed under GPL-3.0. See [LICENSE](LICENSE).

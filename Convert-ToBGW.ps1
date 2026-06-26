@@ -168,7 +168,7 @@ $OutputDir = [IO.Path]::GetFullPath($OutputDir)
 
 $autoWorkDir = -not $WorkDir
 if ($autoWorkDir) {
-    $WorkDir = Join-Path ([IO.Path]::GetTempPath()) ('ffxi-bgw-converter-' + [Guid]::NewGuid().ToString('N'))
+    $WorkDir = Join-Path ([IO.Path]::GetTempPath()) ('bgw-converter-' + [Guid]::NewGuid().ToString('N'))
 }
 $WorkDir = [IO.Path]::GetFullPath($WorkDir)
 $inputWav = Join-Path $WorkDir 'input_wav'

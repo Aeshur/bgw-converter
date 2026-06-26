@@ -17,7 +17,7 @@ if (-not $Version) {
 $projectPath = Join-Path $repoRoot 'src\BgwBulkEncoder\BgwBulkEncoder.csproj'
 $distDir = Join-Path $repoRoot 'dist'
 $publishDir = Join-Path $distDir 'publish'
-$packageName = "FFXI-BGW-Converter-v$Version-$Runtime"
+$packageName = "bgw-converter-v$Version-$Runtime"
 $packageDir = Join-Path $distDir $packageName
 $zipPath = Join-Path $distDir "$packageName.zip"
 
